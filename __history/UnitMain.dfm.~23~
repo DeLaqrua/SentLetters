@@ -1,0 +1,75 @@
+object FormMain: TFormMain
+  Left = 0
+  Top = 0
+  Caption = 'FormMain'
+  ClientHeight = 590
+  ClientWidth = 864
+  Color = clBackground
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWhite
+  Font.Height = -19
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 23
+  object labelPrevious: TLabel
+    Left = 96
+    Top = 152
+    Width = 267
+    Height = 23
+    Alignment = taCenter
+    Caption = #1055#1080#1089#1100#1084#1072' '#1079#1072' '#1087#1088#1077#1076#1099#1076#1091#1097#1080#1081' '#1084#1077#1089#1103#1094
+  end
+  object labelCurrent: TLabel
+    Left = 512
+    Top = 152
+    Width = 267
+    Height = 23
+    Alignment = taCenter
+    AutoSize = False
+    Caption = #1055#1080#1089#1100#1084#1072' '#1079#1072' '#1090#1077#1082#1091#1097#1080#1081' '#1084#1077#1089#1103#1094
+  end
+  object labelPreviousMonth: TLabel
+    Left = 96
+    Top = 181
+    Width = 267
+    Height = 23
+    Alignment = taCenter
+    AutoSize = False
+  end
+  object LabelCurrentMonth: TLabel
+    Left = 512
+    Top = 181
+    Width = 267
+    Height = 23
+    Alignment = taCenter
+    AutoSize = False
+  end
+  object buttonCheck: TButton
+    Left = 264
+    Top = 88
+    Width = 329
+    Height = 33
+    Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
+    TabOrder = 0
+  end
+  object drawgridPreviousMonth: TDrawGrid
+    Left = 32
+    Top = 232
+    Width = 401
+    Height = 337
+    ColCount = 3
+    DrawingStyle = gdsGradient
+    FixedCols = 0
+    RowCount = 2
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
+    ParentFont = False
+    TabOrder = 1
+  end
+end
