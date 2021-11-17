@@ -82,6 +82,7 @@ object FormMain: TFormMain
     Height = 33
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     TabOrder = 0
+    OnClick = buttonCheckClick
   end
   object drawgridPreviousMonth: TDrawGrid
     Left = 24
@@ -142,8 +143,14 @@ object FormMain: TFormMain
     Top = 19
     Width = 397
     Height = 31
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 4
-    Text = 'editSelectDirectory'
+    Text = 'E:\Proba\'#1054#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
   end
   object buttonSelectDirectory: TButton
     Left = 743
@@ -158,5 +165,6 @@ object FormMain: TFormMain
     Font.Style = []
     ParentFont = False
     TabOrder = 5
+    OnClick = buttonSelectDirectoryClick
   end
 end
