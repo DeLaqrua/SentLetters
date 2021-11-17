@@ -11,6 +11,7 @@ object FormMain: TFormMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 23
   object labelPrevious: TLabel
@@ -111,8 +112,10 @@ object FormMain: TFormMain
     Font.Height = -19
     Font.Name = 'Tahoma'
     Font.Style = []
+    ItemIndex = 0
     ParentFont = False
     TabOrder = 2
+    Text = '<'#1074#1089#1077'>'
     Items.Strings = (
       '<'#1074#1089#1077'>')
   end

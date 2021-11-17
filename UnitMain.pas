@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils;
 
 type
   TFormMain = class(TForm)
@@ -20,17 +20,82 @@ type
     labelSelectDirectory: TLabel;
     editSelectDirectory: TEdit;
     buttonSelectDirectory: TButton;
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
-    { Public declarations }
+    function CorrectPath(inputDirectory: string): string;
   end;
 
 var
   FormMain: TFormMain;
+const
+  allMO = 1;
 
 implementation
 
 {$R *.dfm}
+
+procedure TFormMain.FormCreate(Sender: TObject);
+var currentMonth, previousMonth: string;
+    test: integer;
+begin
+  comboboxSelectMo.ItemIndex := 0;
+
+  case MonthOf(IncMonth(Date, -1)) of
+    1 : previousMonth := 'Январь';
+    2 : previousMonth := 'Февраль';
+    3 : previousMonth := 'Март';
+    4 : previousMonth := 'Апрель';
+    5 : previousMonth := 'Май';
+    6 : previousMonth := 'Июнь';
+    7 : previousMonth := 'Июль';
+    8 : previousMonth := 'Август';
+    9 : previousMonth := 'Сентябрь';
+    10 : previousMonth := 'Октябрь';
+    11 : previousMonth := 'Ноябрь';
+    12 : previousMonth := 'Декабрь';
+  else previousMonth := 'Неизвестный месяц оО';
+  end;
+  labelPreviousMonth.Caption := '(' + previousMonth + ')';
+
+  case MonthOf(Date) of
+    1 : currentMonth := 'Январь';
+    2 : currentMonth := 'Февраль';
+    3 : currentMonth := 'Март';
+    4 : currentMonth := 'Апрель';
+    5 : currentMonth := 'Май';
+    6 : currentMonth := 'Июнь';
+    7 : currentMonth := 'Июль';
+    8 : currentMonth := 'Август';
+    9 : currentMonth := 'Сентябрь';
+    10 : currentMonth := 'Октябрь';
+    11 : currentMonth := 'Ноябрь';
+    12 : currentMonth := 'Декабрь';
+  else currentMonth := 'Неизвестный месяц оО';
+  end;
+  labelCurrentMonth.Caption := '(' + currentMonth + ')';
+
+end;
+
+function TFormMain.CorrectPath(inputDirectory: string): string;
+begin
+  if inputDirectory = '' then
+    Result := ''
+  else
+    begin
+      inputDirectory := Trim(inputDirectory);
+
+      if Pos('/', inputDirectory) <> 0 then
+        begin
+          inputDirectory := StringReplace(inputDirectory, '/', '\', [rfReplaceAll]);
+        end;
+
+      if inputDirectory[length(inputDirectory)] <> '\' then
+        Result := inputDirectory + '\'
+      else
+        Result := inputDirectory;
+    end;
+end;
 
 end.
