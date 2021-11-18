@@ -38,7 +38,7 @@ var
 var
   directoryRoot: string;
 const
-  ALLMO = 1;
+  ALLMO = 0;
 
 implementation
 
@@ -48,7 +48,7 @@ procedure TFormMain.FormCreate(Sender: TObject);
 var currentMonth, previousMonth: string;
     test: integer;
 begin
-  comboboxSelectMo.ItemIndex := 0;
+  comboboxSelectMo.ItemIndex := ALLMO;
 
   case MonthOf(IncMonth(Date, -1)) of
     1 : previousMonth := 'Январь';
@@ -95,6 +95,8 @@ begin
     ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.');
+  if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
   buttonCheck.Enabled := true;
 end;
 

@@ -92,7 +92,9 @@ begin
   buttonCheck.Enabled := false;
   directoryRoot := correctPath(editSelectDirectory.Text);
   if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
-      ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+  if checkExcelInstall = False then
+    ShowMessage('На вашем компьютере не установлен Excel.');
   buttonCheck.Enabled := true;
 end;
 
@@ -124,8 +126,13 @@ end;
 
 function TFormMain.checkExcelInstall;
 var ClassID: TCLSID;
+    HRES: HRESULT;
 begin
-
+  HRES := CLSIDFromProgId( PWideChar(WideString('Excel.Application')), ClassID );
+  if HRES = S_OK then
+    result := true
+  else
+    result := false;
 end;
 
 end.
