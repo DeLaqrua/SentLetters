@@ -20,8 +20,6 @@ type
     labelSelectDirectory: TLabel;
     editSelectDirectory: TEdit;
     buttonSelectDirectory: TButton;
-    groupboxSelectMO: TGroupBox;
-    groupboxSelectDirectory: TGroupBox;
     procedure FormCreate(Sender: TObject);
     procedure buttonSelectDirectoryClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);

@@ -5,8 +5,6 @@ object FormMain: TFormMain
   ClientHeight = 604
   ClientWidth = 864
   Color = clBackground
-  Constraints.MinHeight = 390
-  Constraints.MinWidth = 880
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWhite
   Font.Height = -19
@@ -27,7 +25,6 @@ object FormMain: TFormMain
     Alignment = taCenter
     Anchors = [akTop]
     Caption = #1055#1080#1089#1100#1084#1072' '#1079#1072' '#1087#1088#1077#1076#1099#1076#1091#1097#1080#1081' '#1084#1077#1089#1103#1094
-    ExplicitLeft = 91
   end
   object labelCurrent: TLabel
     Left = 502
@@ -38,7 +35,6 @@ object FormMain: TFormMain
     Anchors = [akTop]
     AutoSize = False
     Caption = #1055#1080#1089#1100#1084#1072' '#1079#1072' '#1090#1077#1082#1091#1097#1080#1081' '#1084#1077#1089#1103#1094
-    ExplicitLeft = 487
   end
   object labelPreviousMonth: TLabel
     Left = 96
@@ -48,7 +44,6 @@ object FormMain: TFormMain
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
-    ExplicitLeft = 91
   end
   object LabelCurrentMonth: TLabel
     Left = 502
@@ -58,24 +53,21 @@ object FormMain: TFormMain
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
-    ExplicitLeft = 487
   end
   object buttonCheck: TButton
     Left = 264
     Top = 88
     Width = 329
     Height = 33
-    Anchors = [akTop]
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     TabOrder = 0
     OnClick = buttonCheckClick
-    ExplicitLeft = 254
   end
   object drawgridPreviousMonth: TDrawGrid
-    Left = 8
+    Left = 24
     Top = 288
-    Width = 417
-    Height = 308
+    Width = 401
+    Height = 297
     Anchors = [akTop, akBottom]
     ColCount = 3
     DrawingStyle = gdsGradient
@@ -91,10 +83,10 @@ object FormMain: TFormMain
     TabOrder = 1
   end
   object drawgridCurrentMonth: TDrawGrid
-    Left = 431
+    Left = 439
     Top = 288
-    Width = 425
-    Height = 308
+    Width = 401
+    Height = 297
     Anchors = [akTop, akBottom]
     ColCount = 3
     DrawingStyle = gdsGradient
@@ -116,7 +108,6 @@ object FormMain: TFormMain
     Height = 65
     Anchors = [akTop]
     TabOrder = 3
-    ExplicitLeft = 198
     object labelSelectMo: TLabel
       Left = 48
       Top = 23
@@ -151,14 +142,13 @@ object FormMain: TFormMain
     end
   end
   object groupboxSelectDirectory: TGroupBox
-    Left = 16
+    Left = 24
     Top = 8
-    Width = 833
+    Width = 816
     Height = 57
-    Anchors = [akTop]
     TabOrder = 4
     object labelSelectDirectory: TLabel
-      Left = 40
+      Left = 32
       Top = 17
       Width = 310
       Height = 23
@@ -172,7 +162,7 @@ object FormMain: TFormMain
       ParentFont = False
     end
     object editSelectDirectory: TEdit
-      Left = 356
+      Left = 348
       Top = 11
       Width = 397
       Height = 31
@@ -186,7 +176,7 @@ object FormMain: TFormMain
       Text = 'E:\Proba\'#1054#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     end
     object buttonSelectDirectory: TButton
-      Left = 759
+      Left = 751
       Top = 14
       Width = 26
       Height = 25
