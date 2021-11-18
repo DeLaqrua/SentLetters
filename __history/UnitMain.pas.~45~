@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl;
 
 type
   TFormMain = class(TForm)
@@ -20,17 +20,24 @@ type
     labelSelectDirectory: TLabel;
     editSelectDirectory: TEdit;
     buttonSelectDirectory: TButton;
+    groupboxSelectMO: TGroupBox;
+    groupboxSelectDirectory: TGroupBox;
     procedure FormCreate(Sender: TObject);
+    procedure buttonSelectDirectoryClick(Sender: TObject);
+    procedure buttonCheckClick(Sender: TObject);
   private
     { Private declarations }
   public
-    function CorrectPath(inputDirectory: string): string;
+    function correctPath(inputDirectory: string): string;
   end;
 
 var
   FormMain: TFormMain;
+
+var
+  directoryRoot: string;
 const
-  allMO = 1;
+  ALLMO = 1;
 
 implementation
 
@@ -76,9 +83,25 @@ begin
   end;
   labelCurrentMonth.Caption := '(' + currentMonth + ')';
 
+  directoryRoot := correctPath(editSelectDirectory.Text);
 end;
 
-function TFormMain.CorrectPath(inputDirectory: string): string;
+procedure TFormMain.buttonCheckClick(Sender: TObject);
+begin
+  buttonCheck.Enabled := false;
+  directoryRoot := correctPath(editSelectDirectory.Text);
+  if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
+      ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+  buttonCheck.Enabled := true;
+end;
+
+procedure TFormMain.buttonSelectDirectoryClick(Sender: TObject);
+begin
+  if SelectDirectory('Выберите папку для работы Автопроцессинга:', '', directoryRoot, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
+    editSelectDirectory.Text := directoryRoot;
+end;
+
+function TFormMain.correctPath(inputDirectory: string): string;
 begin
   if inputDirectory = '' then
     Result := ''

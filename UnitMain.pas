@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX;
 
 type
   TFormMain = class(TForm)
@@ -29,6 +29,7 @@ type
     { Private declarations }
   public
     function correctPath(inputDirectory: string): string;
+    function checkExcelInstall: boolean;
   end;
 
 var
@@ -91,7 +92,9 @@ begin
   buttonCheck.Enabled := false;
   directoryRoot := correctPath(editSelectDirectory.Text);
   if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
-      ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+  if checkExcelInstall = False then
+    ShowMessage('На вашем компьютере не установлен Excel.');
   buttonCheck.Enabled := true;
 end;
 
@@ -119,6 +122,17 @@ begin
       else
         Result := inputDirectory;
     end;
+end;
+
+function TFormMain.checkExcelInstall;
+var ClassID: TCLSID;
+    HRES: HRESULT;
+begin
+  HRES := CLSIDFromProgId( PWideChar(WideString('Excel.Application')), ClassID );
+  if HRES = S_OK then
+    result := true
+  else
+    result := false;
 end;
 
 end.
