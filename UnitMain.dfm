@@ -13,6 +13,7 @@ object FormMain: TFormMain
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesktopCenter
   OnCreate = FormCreate
   DesignSize = (
     864
@@ -69,7 +70,6 @@ object FormMain: TFormMain
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     TabOrder = 0
     OnClick = buttonCheckClick
-    ExplicitLeft = 254
   end
   object drawgridPreviousMonth: TDrawGrid
     Left = 8
@@ -110,13 +110,12 @@ object FormMain: TFormMain
     TabOrder = 2
   end
   object groupboxSelectMO: TGroupBox
-    Left = 208
+    Left = 16
     Top = 136
-    Width = 441
+    Width = 833
     Height = 65
     Anchors = [akTop]
     TabOrder = 3
-    ExplicitLeft = 198
     object labelSelectMo: TLabel
       Left = 48
       Top = 23
@@ -134,7 +133,7 @@ object FormMain: TFormMain
     object comboboxSelectMO: TComboBox
       Left = 175
       Top = 15
-      Width = 223
+      Width = 610
       Height = 31
       Style = csDropDownList
       Font.Charset = DEFAULT_CHARSET

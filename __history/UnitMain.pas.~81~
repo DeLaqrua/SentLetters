@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj;
 
 type
   TFormMain = class(TForm)
@@ -46,9 +46,29 @@ implementation
 
 procedure TFormMain.FormCreate(Sender: TObject);
 var currentMonth, previousMonth: string;
-    test: integer;
+    excelCodeMO: variant;
+    i, lastRow:integer;
 begin
   comboboxSelectMo.ItemIndex := ALLMO;
+  if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
+    begin
+      excelCodeMO := CreateOleObject('Excel.Application');
+      try
+        excelCodeMO.Workbooks.Open(ExtractFilePath(ParamStr(0))+'codeMO.xls');
+        lastRow := excelCodeMO.WorkSheets[1].UsedRange.Rows.Count;
+        for i := 1 to lastRow do
+          begin
+            comboboxSelectMO.Items[i] := excelCodeMO.Range['A'+IntToStr(i)];
+          end;
+
+        excelCodeMO.DisplayAlerts := False; //Отключаем оповещение, чтобы, когда закрывался Excel-файл,
+                                            //не спрашивалось сохранить ли файл.
+      finally
+        excelCodeMO.Quit;
+      end;
+    end
+  else
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
 
   case MonthOf(IncMonth(Date, -1)) of
     1 : previousMonth := 'Январь';
@@ -95,8 +115,8 @@ begin
     ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.');
-  if FileExists(ExtractFilePath(ParamStr(0))+'VerifyScript.vbs') then
-    ShowMessage('');
+  if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
   buttonCheck.Enabled := true;
 end;
 
