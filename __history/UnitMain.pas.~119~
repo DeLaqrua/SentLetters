@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj,
+  Vcl.Samples.Spin;
 
 type
   TFormMain = class(TForm)
@@ -20,10 +21,12 @@ type
     groupboxSelectDirectory: TGroupBox;
     LabelSelectMonth: TLabel;
     comboboxSelectMonth: TComboBox;
+    SpinEditYear: TSpinEdit;
     procedure FormCreate(Sender: TObject);
     procedure buttonSelectDirectoryClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);
     procedure comboboxSelectMonthSelect(Sender: TObject);
+    procedure SpinEditYearChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,7 +39,7 @@ var
 
 var
   directoryRoot: string;
-  selectedNumberMonth: integer;
+  selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
 const
   ALLMO = 0;
@@ -70,6 +73,8 @@ begin
   else
     ShowMessage('¬ папке с программой отсутствует Excel-файл "codeMO.xls". Ёто справочник с больницами. Ѕез него программа работать не будет');
 
+  selectedYear := YearOf(Date);
+  spineditYear.Value := selectedYear;
   selectedNumberMonth := MonthOf(Date);
   comboboxSelectMonth.ItemIndex := selectedNumberMonth;
   case selectedNumberMonth of
@@ -86,9 +91,18 @@ begin
     11 : selectedMonth := 'Ќо€брь';
     12 : selectedMonth := 'ƒекабрь';
   end;
-  labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ':';
+  labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 
   directoryRoot := correctPath(editSelectDirectory.Text);
+end;
+
+procedure TFormMain.SpinEditYearChange(Sender: TObject);
+begin
+  selectedYear := spineditYear.Value;
+  if selectedNumberMonth = 0 then
+    labelMonth.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
+  else
+    labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
@@ -110,9 +124,9 @@ begin
   else selectedMonth := '¬се мес€цы';
   end;
   if selectedNumberMonth = 0 then
-    labelMonth.Caption := 'ѕисьма за все мес€цы:'
+    labelMonth.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
-    labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ':';
+    labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);

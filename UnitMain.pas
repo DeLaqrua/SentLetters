@@ -140,7 +140,9 @@ begin
     ShowMessage('На вашем компьютере не установлен Excel.')
   else
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
-    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.');
+  if System.SysUtils.DirectoryExists(directoryRoot + 'Archive\') = False then
+    ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.');
   buttonCheck.Enabled := true;
 end;
 

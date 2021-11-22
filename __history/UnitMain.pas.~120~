@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj,
+  Vcl.Samples.Spin;
 
 type
   TFormMain = class(TForm)
@@ -20,10 +21,12 @@ type
     groupboxSelectDirectory: TGroupBox;
     LabelSelectMonth: TLabel;
     comboboxSelectMonth: TComboBox;
+    SpinEditYear: TSpinEdit;
     procedure FormCreate(Sender: TObject);
     procedure buttonSelectDirectoryClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);
     procedure comboboxSelectMonthSelect(Sender: TObject);
+    procedure SpinEditYearChange(Sender: TObject);
   private
     { Private declarations }
   public
@@ -36,7 +39,7 @@ var
 
 var
   directoryRoot: string;
-  selectedNumberMonth: integer;
+  selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
 const
   ALLMO = 0;
@@ -70,6 +73,8 @@ begin
   else
     ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
 
+  selectedYear := YearOf(Date);
+  spineditYear.Value := selectedYear;
   selectedNumberMonth := MonthOf(Date);
   comboboxSelectMonth.ItemIndex := selectedNumberMonth;
   case selectedNumberMonth of
@@ -86,9 +91,18 @@ begin
     11 : selectedMonth := 'Ноябрь';
     12 : selectedMonth := 'Декабрь';
   end;
-  labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ':';
+  labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 
   directoryRoot := correctPath(editSelectDirectory.Text);
+end;
+
+procedure TFormMain.SpinEditYearChange(Sender: TObject);
+begin
+  selectedYear := spineditYear.Value;
+  if selectedNumberMonth = 0 then
+    labelMonth.Caption := 'Письма за все месяцы' + ' ' + IntToStr(selectedYear) + ' года:'
+  else
+    labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
@@ -109,6 +123,10 @@ begin
     12 : selectedMonth := 'Декабрь';
   else selectedMonth := 'Все месяцы';
   end;
+  if selectedNumberMonth = 0 then
+    labelMonth.Caption := 'Письма за все месяцы' + ' ' + IntToStr(selectedYear) + ' года:'
+  else
+    labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
@@ -122,7 +140,9 @@ begin
     ShowMessage('На вашем компьютере не установлен Excel.')
   else
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
-    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.');
+  if System.SysUtils.DirectoryExists = False then
+    ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.');
   buttonCheck.Enabled := true;
 end;
 
