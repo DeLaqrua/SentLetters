@@ -4,16 +4,13 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, ComObj;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Grids, DateUtils, Vcl.FileCtrl, ActiveX, System.Win.ComObj,
+  Vcl.Samples.Spin;
 
 type
   TFormMain = class(TForm)
     buttonCheck: TButton;
-    labelPrevious: TLabel;
-    labelCurrent: TLabel;
-    labelPreviousMonth: TLabel;
-    LabelCurrentMonth: TLabel;
-    drawgridPreviousMonth: TDrawGrid;
+    LabelMonth: TLabel;
     comboboxSelectMO: TComboBox;
     drawgridCurrentMonth: TDrawGrid;
     labelSelectMo: TLabel;
@@ -22,9 +19,13 @@ type
     buttonSelectDirectory: TButton;
     groupboxSelectMO: TGroupBox;
     groupboxSelectDirectory: TGroupBox;
+    LabelSelectMonth: TLabel;
+    comboboxSelectMonth: TComboBox;
+    SpinEditYear: TSpinEdit;
     procedure FormCreate(Sender: TObject);
     procedure buttonSelectDirectoryClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);
+    procedure comboboxSelectMonthSelect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -37,6 +38,8 @@ var
 
 var
   directoryRoot: string;
+  selectedNumberMonth, selectedYear: integer;
+  selectedMonth: string;
 const
   ALLMO = 0;
 
@@ -45,8 +48,8 @@ implementation
 {$R *.dfm}
 
 procedure TFormMain.FormCreate(Sender: TObject);
-var currentMonth, previousMonth: string;
-    excelCodeMO: variant;
+var excelCodeMO: variant;
+    i, lastRow:integer;
 begin
   comboboxSelectMo.ItemIndex := ALLMO;
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
@@ -54,8 +57,11 @@ begin
       excelCodeMO := CreateOleObject('Excel.Application');
       try
         excelCodeMO.Workbooks.Open(ExtractFilePath(ParamStr(0))+'codeMO.xls');
-
-        excelCodeMO.Range('A2').Value := comboboxSelectMo.Items[1];
+        lastRow := excelCodeMO.WorkSheets[1].UsedRange.Rows.Count;
+        for i := 2 to lastRow do
+          begin
+            comboboxSelectMO.Items[i-1] := VarToStr(excelCodeMO.Range['A'+IntToStr(i)]) + ' – ' + VarToStr(excelCodeMO.Range['B'+IntToStr(i)]);
+          end;
 
         excelCodeMO.DisplayAlerts := False; //Отключаем оповещение, чтобы, когда закрывался Excel-файл,
                                             //не спрашивалось сохранить ли файл.
@@ -66,41 +72,50 @@ begin
   else
     ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
 
-  case MonthOf(IncMonth(Date, -1)) of
-    1 : previousMonth := 'Январь';
-    2 : previousMonth := 'Февраль';
-    3 : previousMonth := 'Март';
-    4 : previousMonth := 'Апрель';
-    5 : previousMonth := 'Май';
-    6 : previousMonth := 'Июнь';
-    7 : previousMonth := 'Июль';
-    8 : previousMonth := 'Август';
-    9 : previousMonth := 'Сентябрь';
-    10 : previousMonth := 'Октябрь';
-    11 : previousMonth := 'Ноябрь';
-    12 : previousMonth := 'Декабрь';
-  else previousMonth := 'Неизвестный месяц оО';
+  selectedYear := YearOf(Date);
+  selectedNumberMonth := MonthOf(Date);
+  comboboxSelectMonth.ItemIndex := selectedNumberMonth;
+  case selectedNumberMonth of
+    1 : selectedMonth := 'Январь';
+    2 : selectedMonth := 'Февраль';
+    3 : selectedMonth := 'Март';
+    4 : selectedMonth := 'Апрель';
+    5 : selectedMonth := 'Май';
+    6 : selectedMonth := 'Июнь';
+    7 : selectedMonth := 'Июль';
+    8 : selectedMonth := 'Август';
+    9 : selectedMonth := 'Сентябрь';
+    10 : selectedMonth := 'Октябрь';
+    11 : selectedMonth := 'Ноябрь';
+    12 : selectedMonth := 'Декабрь';
   end;
-  labelPreviousMonth.Caption := '(' + previousMonth + ')';
-
-  case MonthOf(Date) of
-    1 : currentMonth := 'Январь';
-    2 : currentMonth := 'Февраль';
-    3 : currentMonth := 'Март';
-    4 : currentMonth := 'Апрель';
-    5 : currentMonth := 'Май';
-    6 : currentMonth := 'Июнь';
-    7 : currentMonth := 'Июль';
-    8 : currentMonth := 'Август';
-    9 : currentMonth := 'Сентябрь';
-    10 : currentMonth := 'Октябрь';
-    11 : currentMonth := 'Ноябрь';
-    12 : currentMonth := 'Декабрь';
-  else currentMonth := 'Неизвестный месяц оО';
-  end;
-  labelCurrentMonth.Caption := '(' + currentMonth + ')';
+  labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 
   directoryRoot := correctPath(editSelectDirectory.Text);
+end;
+
+procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
+begin
+  selectedNumberMonth := comboboxSelectMonth.ItemIndex;
+  case selectedNumberMonth of
+    1 : selectedMonth := 'Январь';
+    2 : selectedMonth := 'Февраль';
+    3 : selectedMonth := 'Март';
+    4 : selectedMonth := 'Апрель';
+    5 : selectedMonth := 'Май';
+    6 : selectedMonth := 'Июнь';
+    7 : selectedMonth := 'Июль';
+    8 : selectedMonth := 'Август';
+    9 : selectedMonth := 'Сентябрь';
+    10 : selectedMonth := 'Октябрь';
+    11 : selectedMonth := 'Ноябрь';
+    12 : selectedMonth := 'Декабрь';
+  else selectedMonth := 'Все месяцы';
+  end;
+  if selectedNumberMonth = 0 then
+    labelMonth.Caption := 'Письма за все месяцы:'
+  else
+    labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ':';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
@@ -108,9 +123,11 @@ begin
   buttonCheck.Enabled := false;
   directoryRoot := correctPath(editSelectDirectory.Text);
   if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
-    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.');
+    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
+  else
   if checkExcelInstall = False then
-    ShowMessage('На вашем компьютере не установлен Excel.');
+    ShowMessage('На вашем компьютере не установлен Excel.')
+  else
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
     ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет');
   buttonCheck.Enabled := true;
