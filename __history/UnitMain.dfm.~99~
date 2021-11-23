@@ -21,9 +21,9 @@ object FormMain: TFormMain
   PixelsPerInch = 96
   TextHeight = 23
   object LabelMonth: TLabel
-    Left = 184
+    Left = 168
     Top = 269
-    Width = 497
+    Width = 513
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
@@ -36,7 +36,7 @@ object FormMain: TFormMain
     Height = 33
     Anchors = [akTop]
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
-    TabOrder = 0
+    TabOrder = 1
     OnClick = buttonCheckClick
   end
   object groupboxSelectMO: TGroupBox
@@ -45,7 +45,7 @@ object FormMain: TFormMain
     Width = 833
     Height = 113
     Anchors = [akTop]
-    TabOrder = 1
+    TabOrder = 2
     object labelSelectMo: TLabel
       Left = 56
       Top = 23
@@ -148,7 +148,7 @@ object FormMain: TFormMain
     Width = 833
     Height = 57
     Anchors = [akTop]
-    TabOrder = 2
+    TabOrder = 3
     object labelSelectDirectory: TLabel
       Left = 29
       Top = 16
@@ -193,13 +193,14 @@ object FormMain: TFormMain
       OnClick = buttonSelectDirectoryClick
     end
   end
-  object stringgridLetters: TStringGrid
+  object stringgridMails: TStringGrid
     Left = 8
     Top = 304
     Width = 848
     Height = 338
     Anchors = [akTop, akBottom]
     ColCount = 4
+    DefaultRowHeight = 32
     DrawingStyle = gdsGradient
     FixedCols = 0
     RowCount = 2
@@ -210,10 +211,11 @@ object FormMain: TFormMain
     Font.Style = []
     Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 0
+    OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
       352
-      30
+      39
       155
       347)
   end

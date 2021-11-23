@@ -28,6 +28,8 @@ type
     procedure comboboxSelectMonthSelect(Sender: TObject);
     procedure SpinEditYearChange(Sender: TObject);
     procedure stringgridMailsMouseEnter(Sender: TObject);
+    procedure stringgridMailsDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
   public
@@ -42,6 +44,7 @@ var
   directoryRoot: string;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
+  imgMailSent, imgMailNotSent: TPicture;
 const
   ALLMO = 0;
 
@@ -52,11 +55,16 @@ implementation
 procedure TFormMain.FormCreate(Sender: TObject);
 var excelCodeMO: variant;
     i, lastRow:integer;
-    mailSent, mailNotSent: TPicture;
 begin
   stringgridMails.Cells[0,0] := 'Код МО:';
   stringgridMails.Cells[2,0] := 'Дата:';
   stringgridMails.Cells[3,0] := 'Файл:';
+  imgMailSent := TPicture.Create;
+  imgMailNotSent := TPicture.Create;
+  imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
+  imgMailNotSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailNotSent32px.bmp');
+  stringgridMails.ColWidths[1] := 36;
+  stringgridMails.RowHeights[1] := 32;
 
   comboboxSelectMo.ItemIndex := ALLMO;
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
@@ -105,6 +113,15 @@ begin
   directoryRoot := correctPath(editSelectDirectory.Text);
 end;
 
+procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+begin
+  if (ACol = 1) and (ARow = 1) then
+    begin
+      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+    end;
+end;
+
 procedure TFormMain.SpinEditYearChange(Sender: TObject);
 begin
   selectedYear := spineditYear.Value;
@@ -112,11 +129,6 @@ begin
     labelMonth.Caption := 'Письма за все месяцы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
     labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
-end;
-
-procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
-begin
-  stringgridMails.SetFocus;
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
@@ -195,6 +207,11 @@ begin
     result := true
   else
     result := false;
+end;
+
+procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
+begin
+  stringgridMails.SetFocus;
 end;
 
 end.

@@ -28,6 +28,8 @@ type
     procedure comboboxSelectMonthSelect(Sender: TObject);
     procedure SpinEditYearChange(Sender: TObject);
     procedure stringgridMailsMouseEnter(Sender: TObject);
+    procedure stringgridMailsDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
   public
@@ -42,6 +44,7 @@ var
   directoryRoot: string;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
+  imgMailSent, imgMailNotSent: TPicture;
 const
   ALLMO = 0;
 
@@ -56,6 +59,12 @@ begin
   stringgridMails.Cells[0,0] := 'Код МО:';
   stringgridMails.Cells[2,0] := 'Дата:';
   stringgridMails.Cells[3,0] := 'Файл:';
+  imgMailSent := TPicture.Create;
+  imgMailNotSent := TPicture.Create;
+  imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
+  imgMailNotSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailNotSent32px.bmp');
+  stringgridMails.ColWidths[1] := imgMailSent.Width;
+  stringgridMails.RowHeights[1] := imgMailSent.Height;
 
   comboboxSelectMo.ItemIndex := ALLMO;
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
@@ -113,9 +122,18 @@ begin
     labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
+procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+begin
+  if (ACol = 1) and (ARow = 1) then
+    begin
+      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+    end;
+end;
+
 procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
 begin
-  stringgridLetters.SetFocus;
+  stringgridMails.SetFocus;
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);

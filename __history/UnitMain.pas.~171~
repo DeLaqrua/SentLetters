@@ -21,13 +21,15 @@ type
     LabelSelectMonth: TLabel;
     comboboxSelectMonth: TComboBox;
     SpinEditYear: TSpinEdit;
-    stringgridLetters: TStringGrid;
+    stringgridMails: TStringGrid;
     procedure FormCreate(Sender: TObject);
     procedure buttonSelectDirectoryClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);
     procedure comboboxSelectMonthSelect(Sender: TObject);
     procedure SpinEditYearChange(Sender: TObject);
-    procedure stringgridLettersMouseEnter(Sender: TObject);
+    procedure stringgridMailsMouseEnter(Sender: TObject);
+    procedure stringgridMailsDrawCell(Sender: TObject; ACol, ARow: Integer;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
   public
@@ -42,6 +44,7 @@ var
   directoryRoot: string;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
+  imgMailSent, imgMailNotSent: TPicture;
 const
   ALLMO = 0;
 
@@ -53,9 +56,16 @@ procedure TFormMain.FormCreate(Sender: TObject);
 var excelCodeMO: variant;
     i, lastRow:integer;
 begin
-  stringgridLetters.Cells[0,0] := 'Код МО:';
-  stringgridLetters.Cells[2,0] := 'Дата:';
-  stringgridLetters.Cells[3,0] := 'Файл:';
+  stringgridMails.Cells[0,0] := 'Код МО:';
+  stringgridMails.Cells[2,0] := 'Дата:';
+  stringgridMails.Cells[3,0] := 'Файл:';
+  imgMailSent := TPicture.Create;
+  imgMailNotSent := TPicture.Create;
+  imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
+  imgMailNotSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailNotSent32px.bmp');
+  stringgridMails.ColWidths[1] := 36;
+  stringgridMails.RowHeights[1] := 32;
+  imgMailSent.Free;
 
   comboboxSelectMo.ItemIndex := ALLMO;
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
@@ -69,7 +79,7 @@ begin
             comboboxSelectMO.Items[i-1] := VarToStr(excelCodeMO.Range['A'+IntToStr(i)]) + ' – ' + VarToStr(excelCodeMO.Range['B'+IntToStr(i)]);
           end;
 
-        stringgridLetters.RowCount := lastRow; //Определяем количество строк StringGrid
+        stringgridMails.RowCount := lastRow; //Определяем количество строк StringGrid
                                                  //равное количеству МО из Excel-документа
 
         excelCodeMO.DisplayAlerts := False; //Отключаем оповещение, чтобы, когда закрывался Excel-файл,
@@ -104,6 +114,15 @@ begin
   directoryRoot := correctPath(editSelectDirectory.Text);
 end;
 
+procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+begin
+  if (ACol = 1) and (ARow = 1) then
+    begin
+      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+    end;
+end;
+
 procedure TFormMain.SpinEditYearChange(Sender: TObject);
 begin
   selectedYear := spineditYear.Value;
@@ -113,9 +132,9 @@ begin
     labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
-procedure TFormMain.stringgridLettersMouseEnter(Sender: TObject);
+procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
 begin
-  stringgridLetters.SetFocus;
+  stringgridMails.SetFocus;
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);

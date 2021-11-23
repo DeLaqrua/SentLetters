@@ -212,6 +212,7 @@ object FormMain: TFormMain
     Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     ParentFont = False
     TabOrder = 0
+    OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
       352
