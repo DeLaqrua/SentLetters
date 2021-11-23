@@ -37,6 +37,8 @@ type
     function checkExcelInstall: boolean;
   end;
 
+TMail = class(TObject);
+
 var
   FormMain: TFormMain;
 
@@ -47,6 +49,7 @@ var
   imgMailSent, imgMailNotSent: TPicture;
 const
   ALLMO = 0;
+  ALLMONTH = 0;
 
 implementation
 
@@ -57,8 +60,8 @@ var excelCodeMO: variant;
     i, lastRow:integer;
 begin
   stringgridMails.Cells[0,0] := 'Код МО:';
-  stringgridMails.Cells[2,0] := 'Дата:';
-  stringgridMails.Cells[3,0] := 'Файл:';
+  stringgridMails.Cells[2,0] := 'Дата и примерное время отправки:';
+  stringgridMails.Cells[3,0] := 'Имя файла:';
   imgMailSent := TPicture.Create;
   imgMailNotSent := TPicture.Create;
   imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
@@ -113,6 +116,38 @@ begin
   directoryRoot := correctPath(editSelectDirectory.Text);
 end;
 
+procedure TFormMain.buttonCheckClick(Sender: TObject);
+var searchResult: TSearchRec;
+    i: integer;
+begin
+  buttonCheck.Enabled := false;
+
+  directoryRoot := correctPath(editSelectDirectory.Text);
+  if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
+    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
+  else
+  if checkExcelInstall = False then
+    ShowMessage('На вашем компьютере не установлен Excel.')
+  else
+  if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.');
+  if System.SysUtils.DirectoryExists(directoryRoot + 'Archive\') = False then
+    ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.')
+  else
+    begin
+      i := 0;
+      if FindFirst(directoryRoot + IntToStr(selectedYear) + '\*.*', faAnyFile, searchResult) = 0 then
+        begin
+          repeat
+          i := i + 1;
+          until FindNext(searchResult) <> 0;
+          FindClose(searchResult);
+        end;
+    end;
+
+  buttonCheck.Enabled := true;
+end;
+
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
@@ -129,11 +164,6 @@ begin
     labelMonth.Caption := 'Письма за все месяцы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
     labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
-end;
-
-procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
-begin
-  stringgridMails.SetFocus;
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
@@ -158,23 +188,6 @@ begin
     labelMonth.Caption := 'Письма за все месяцы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
     labelMonth.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
-end;
-
-procedure TFormMain.buttonCheckClick(Sender: TObject);
-begin
-  buttonCheck.Enabled := false;
-  directoryRoot := correctPath(editSelectDirectory.Text);
-  if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
-    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
-  else
-  if checkExcelInstall = False then
-    ShowMessage('На вашем компьютере не установлен Excel.')
-  else
-  if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
-    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.');
-  if System.SysUtils.DirectoryExists(directoryRoot + 'Archive\') = False then
-    ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.');
-  buttonCheck.Enabled := true;
 end;
 
 procedure TFormMain.buttonSelectDirectoryClick(Sender: TObject);
@@ -212,6 +225,11 @@ begin
     result := true
   else
     result := false;
+end;
+
+procedure TFormMain.stringgridMailsMouseEnter(Sender: TObject);
+begin
+  stringgridMails.SetFocus;
 end;
 
 end.

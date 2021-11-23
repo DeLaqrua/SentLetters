@@ -21,17 +21,17 @@ object FormMain: TFormMain
   PixelsPerInch = 96
   TextHeight = 23
   object LabelMonth: TLabel
-    Left = 168
-    Top = 269
-    Width = 513
+    Left = 176
+    Top = 267
+    Width = 521
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
   end
   object buttonCheck: TButton
-    Left = 256
-    Top = 208
+    Left = 272
+    Top = 216
     Width = 329
     Height = 33
     Anchors = [akTop]
@@ -215,9 +215,9 @@ object FormMain: TFormMain
     OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
-      352
+      161
       39
-      155
-      347)
+      279
+      348)
   end
 end
