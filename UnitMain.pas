@@ -169,6 +169,7 @@ begin
                         begin
                           repeat
                             j := j + 1;
+                            stringgridMails.Cells[0, j] := listCodeMO[i];
                             stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
                             stringgridMails.Cells[3, j] := searchResult.Name;
                           until FindNext(searchResult) <> 0;
@@ -184,6 +185,7 @@ begin
                     begin
                       repeat
                         j := j + 1;
+                        stringgridMails.Cells[0, j] := listCodeMO[i];
                         stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
                         stringgridMails.Cells[3, j] := searchResult.Name;
                       until FindNext(searchResult) <> 0;
@@ -204,6 +206,7 @@ begin
                     begin
                       repeat
                         j := j + 1;
+                        stringgridMails.Cells[0, j] := listCodeMO[i];
                         stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
                         stringgridMails.Cells[3, j] := searchResult.Name;
                       until FindNext(searchResult) <> 0;
@@ -219,6 +222,7 @@ begin
                 begin
                   repeat
                     j := j + 1;
+                    stringgridMails.Cells[0, j] := listCodeMO[i];
                     stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
                     stringgridMails.Cells[3, j] := searchResult.Name;
                   until FindNext(searchResult) <> 0;

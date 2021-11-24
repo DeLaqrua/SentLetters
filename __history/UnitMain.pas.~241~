@@ -154,19 +154,53 @@ begin
     ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.')
   else
     begin
-      if comboboxSelectMO.ItemIndex = ALLMO then
+      j := 0;
+      IF comboboxSelectMO.ItemIndex = ALLMO THEN
         begin
-          //Заглушка
+          for i := 0 to listCodeMO.Count-1 do
+            begin
+              if comboboxSelectMonth.ItemIndex = ALLMONTH then
+                begin
+                  for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
+                    begin
+                      if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
+                                   comboboxSelectMonth.Items[monthNumber] +
+                                   '\*' + listCodeMO[i] + '*', faNormal, searchResult) = 0 then
+                        begin
+                          repeat
+                            j := j + 1;
+                            stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
+                            stringgridMails.Cells[3, j] := searchResult.Name;
+                          until FindNext(searchResult) <> 0;
+                          FindClose(searchResult);
+                        end;
+                    end;
+                end
+              else
+                begin
+                  if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
+                               comboboxSelectMonth.Text +
+                               '\*' + listCodeMO[i] + '*', faNormal, searchResult) = 0 then
+                    begin
+                      repeat
+                        j := j + 1;
+                        stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
+                        stringgridMails.Cells[3, j] := searchResult.Name;
+                      until FindNext(searchResult) <> 0;
+                      FindClose(searchResult);
+                    end;
+                end;
+            end;
         end
-      else
+      ELSE
         begin
           if comboboxSelectMonth.ItemIndex = ALLMONTH then
             begin
-              j := 0;
               for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
                 begin
                   if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
-                               comboboxSelectMonth.Items[monthNumber] + '\' + listCodeMO[comboboxSelectMO.ItemIndex-1] + '*.*', faNormal, searchResult) = 0 then
+                               comboboxSelectMonth.Items[monthNumber] +
+                               '\*' + listCodeMO[comboboxSelectMO.ItemIndex-1] + '*', faNormal, searchResult) = 0 then
                     begin
                       repeat
                         j := j + 1;
@@ -179,9 +213,9 @@ begin
             end
           else
             begin
-              j := 0;
               if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
-                           comboboxSelectMonth.Text + '\*.*', faNormal, searchResult) = 0 then
+                           comboboxSelectMonth.Text +
+                           '\*' + listCodeMO[comboboxSelectMO.ItemIndex-1] + '*', faNormal, searchResult) = 0 then
                 begin
                   repeat
                     j := j + 1;
