@@ -218,7 +218,7 @@ object FormMain: TFormMain
     ColWidths = (
       161
       39
-      279
-      348)
+      272
+      354)
   end
 end

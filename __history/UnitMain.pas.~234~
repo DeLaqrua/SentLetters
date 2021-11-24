@@ -132,7 +132,7 @@ end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
 var searchResult: TSearchRec;
-    i, j: integer;
+    i, j, monthNumber: integer;
 begin
   buttonCheck.Enabled := false;
 
@@ -154,21 +154,44 @@ begin
     ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.')
   else
     begin
-      if comboboxSelectMonth.ItemIndex = 0 then
+      if comboboxSelectMO.ItemIndex = ALLMO then
         begin
           //Заглушка
         end
       else
         begin
-          j := 0;
-          if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' + comboboxSelectMonth.Text + '\*.*', faNormal, searchResult) = 0 then
+          if comboboxSelectMonth.ItemIndex = ALLMONTH then
             begin
-              repeat
-                j := j + 1;
-                stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
-                stringgridMails.Cells[3, j] := searchResult.Name;
-              until FindNext(searchResult) <> 0;
-              FindClose(searchResult);
+              j := 0;
+              for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
+                begin
+                  if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
+                               comboboxSelectMonth.Items[monthNumber] +
+                               '\*' + listCodeMO[comboboxSelectMO.ItemIndex-1] + '*', faNormal, searchResult) = 0 then
+                    begin
+                      repeat
+                        j := j + 1;
+                        stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
+                        stringgridMails.Cells[3, j] := searchResult.Name;
+                      until FindNext(searchResult) <> 0;
+                      FindClose(searchResult);
+                    end;
+                end;
+            end
+          else
+            begin
+              j := 0;
+              if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' +
+                           comboboxSelectMonth.Text +
+                           '\*' + listCodeMO[comboboxSelectMO.ItemIndex-1] + '*', faNormal, searchResult) = 0 then
+                begin
+                  repeat
+                    j := j + 1;
+                    stringgridMails.Cells[2, j] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
+                    stringgridMails.Cells[3, j] := searchResult.Name;
+                  until FindNext(searchResult) <> 0;
+                  FindClose(searchResult);
+                end;
             end;
         end;
     end;
