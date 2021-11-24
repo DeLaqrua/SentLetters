@@ -10,7 +10,7 @@ uses
 type
   TFormMain = class(TForm)
     buttonCheck: TButton;
-    LabelMonth: TLabel;
+    labelHelp: TLabel;
     comboboxSelectMO: TComboBox;
     labelSelectMo: TLabel;
     labelSelectDirectory: TLabel;
@@ -30,6 +30,7 @@ type
     procedure stringgridMailsMouseEnter(Sender: TObject);
     procedure stringgridMailsDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -47,7 +48,7 @@ var
 
 var
   directoryRoot: string;
-  listMO: TStringList;
+  listCodeMO: TStringList;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
   imgMailSent, imgMailNotSent: TPicture;
@@ -59,9 +60,16 @@ implementation
 
 {$R *.dfm}
 
+procedure TFormMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  imgMailSent.Free;
+  imgMailNotSent.Free;
+  listCodeMO.Free;
+end;
+
 procedure TFormMain.FormCreate(Sender: TObject);
 var excelCodeMO: variant;
-    i, lastRow:integer;
+    i, lastRow: integer;
 begin
   stringgridMails.Cells[0,0] := ' од ћќ:';
   stringgridMails.Cells[2,0] := 'ƒата и примерное врем€ отправки:';
@@ -73,6 +81,7 @@ begin
   stringgridMails.ColWidths[1] := 36;
   stringgridMails.RowHeights[1] := 32;
 
+  listCodeMo := TStringList.Create;
   comboboxSelectMo.ItemIndex := ALLMO;
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = True then
     begin
@@ -82,7 +91,8 @@ begin
         lastRow := excelCodeMO.WorkSheets[1].UsedRange.Rows.Count;
         for i := 2 to lastRow do
           begin
-            comboboxSelectMO.Items[i-1] := VarToStr(excelCodeMO.Range['A'+IntToStr(i)]) + ' Ц ' + VarToStr(excelCodeMO.Range['B'+IntToStr(i)]);
+            listCodeMO.Add(VarToStr(excelCodeMO.Range['A'+IntToStr(i)]));
+            comboboxSelectMO.Items[i-1] := listCodeMO[i-2] + ' Ц ' + VarToStr(excelCodeMO.Range['B'+IntToStr(i)]);
           end;
 
         stringgridMails.RowCount := lastRow; //ќпредел€ем количество строк StringGrid
@@ -115,7 +125,7 @@ begin
     11 : selectedMonth := 'Ќо€брь';
     12 : selectedMonth := 'ƒекабрь';
   end;
-  labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
+  labelHelp.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 
   directoryRoot := correctPath(editSelectDirectory.Text);
 end;
@@ -139,14 +149,22 @@ begin
     ShowMessage('ќтсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хр€н€тс€ отправленные письма.')
   else
     begin
-      i := 0;
-      if FindFirst(directoryRoot + IntToStr(selectedYear) + '\*.*', faAnyFile, searchResult) = 0 then
+      if comboboxSelectMonth.ItemIndex = 0 then
         begin
-          repeat
-          i := i + 1;
           //«аглушка
-          until FindNext(searchResult) <> 0;
-          FindClose(searchResult);
+        end
+      else
+        begin
+          i := 0;
+          if FindFirst(directoryRoot + 'Archive\' + IntToStr(selectedYear) + '\' + comboboxSelectMonth.Text + '\*.*', faNormal, searchResult) = 0 then
+            begin
+              repeat
+                i := i + 1;
+                stringgridMails.Cells[2, i] := DateTimeToStr(FileDateToDateTime(searchResult.Time));
+                stringgridMails.Cells[3, i] := searchResult.Name;
+              until FindNext(searchResult) <> 0;
+              FindClose(searchResult);
+            end;
         end;
     end;
 
@@ -166,9 +184,9 @@ procedure TFormMain.SpinEditYearChange(Sender: TObject);
 begin
   selectedYear := spineditYear.Value;
   if selectedNumberMonth = 0 then
-    labelMonth.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
+    labelHelp.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
-    labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
+    labelHelp.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.comboboxSelectMonthSelect(Sender: TObject);
@@ -190,9 +208,9 @@ begin
   else selectedMonth := '¬се мес€цы';
   end;
   if selectedNumberMonth = 0 then
-    labelMonth.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
+    labelHelp.Caption := 'ѕисьма за все мес€цы' + ' ' + IntToStr(selectedYear) + ' года:'
   else
-    labelMonth.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
+    labelHelp.Caption := 'ѕисьма за мес€ц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
 procedure TFormMain.buttonSelectDirectoryClick(Sender: TObject);

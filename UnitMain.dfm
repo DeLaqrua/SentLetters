@@ -14,16 +14,17 @@ object FormMain: TFormMain
   Font.Style = []
   OldCreateOrder = False
   Position = poDesktopCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
     864
     650)
   PixelsPerInch = 96
   TextHeight = 23
-  object LabelMonth: TLabel
-    Left = 176
+  object labelHelp: TLabel
+    Left = 8
     Top = 267
-    Width = 521
+    Width = 848
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
