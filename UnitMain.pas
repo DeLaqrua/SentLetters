@@ -40,11 +40,11 @@ type
     procedure searchMails(inputDirectoryArchive: string; //Внутри для отслеживания писем есть папка Archive.
                                                          //Её и нужно указывать для поиска писем.
                           inputYear, inputMonth: string;
-                          inputCodeMO: string;
-                          inputRowStringGrid: integer);
+                          inputCodeMO: string);
   end;
 
 TMail = class(TObject)
+  number: integer; //Номер по порядку
   codeMO: string;
   isSent: boolean;
   month: string;
@@ -183,10 +183,10 @@ begin
               if comboboxSelectMonth.ItemIndex = ALLMONTH then
                 begin
                   for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
-                    searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[indexMO], indexMails);
+                    searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[indexMO]);
                 end
               else
-                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[indexMO], indexMails);
+                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[indexMO]);
             end;
         end
       ELSE
@@ -194,20 +194,20 @@ begin
           if comboboxSelectMonth.ItemIndex = ALLMONTH then
             begin
               for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
-                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[comboboxSelectMO.ItemIndex-1], indexMails);
+                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[comboboxSelectMO.ItemIndex-1]);
             end
           else
-            searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1], indexMails);
+            searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1]);
         end;
 
       //Из массива передаём значения в StringGrid
       stringgridMails.RowCount := Length(mails)+1;
       for i := 0 to High(mails) do
         begin
-          stringgridMails.Cells[0, i+1] := mails[i].codeMO;
-          stringgridMails.Cells[2, i+1] := mails[i].month;
-          stringgridMails.Cells[3, i+1] := mails[i].fileName;
-          stringgridMails.Cells[4, i+1] := mails[i].fileDateTime;
+          stringgridMails.Cells[0, mails[i].number] := mails[i].codeMO;
+          stringgridMails.Cells[2, mails[i].number] := mails[i].month;
+          stringgridMails.Cells[3, mails[i].number] := mails[i].fileName;
+          stringgridMails.Cells[4, mails[i].number] := mails[i].fileDateTime;
         end;
     end;
 
@@ -217,38 +217,42 @@ end;
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
-  {if (ACol = 1) and (ARow = 1) then
-    begin
-      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
-    end;}
+  {if (Length(mails) > 0) and (ACol = 1) and (mails[ARow].isSent = True) and (ARow = mails[ARow].number) then
+    stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+  if (Length(mails) > 0) and (ACol = 1) and (mails[ARow].isSent = False) and (ARow = mails[ARow].number) then
+    stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);}
 end;
 
-procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string; inputRowStringGrid: integer);
+procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string);
 var searchResult: TSearchRec;
 begin
   if FindFirst(inputDirectoryArchive + inputYear + '\' + inputMonth + '\*' + inputCodeMO + '*', faNormal, searchResult) = 0 then
     begin
       repeat
         SetLength(mails, Length(mails)+1);
-        mails[inputRowStringGrid] := TMail.Create;
-        mails[inputRowStringGrid].codeMO := inputCodeMO;
-        mails[inputRowStringGrid].isSent := True;
-        mails[inputRowStringGrid].month := inputMonth;
-        mails[inputRowStringGrid].fileDateTime := DateTimeToStr(FileDateToDateTime(searchResult.Time)); //Время изменения файла возвращается
+        mails[indexMails] := TMail.Create;
+
+        mails[indexMails].number := IndexMails + 1;
+        mails[indexMails].codeMO := inputCodeMO;
+        mails[indexMails].isSent := True;
+        mails[indexMails].month := inputMonth;
+        mails[indexMails].fileDateTime := DateTimeToStr(FileDateToDateTime(searchResult.Time)); //Время изменения файла возвращается
                                                                                                         //в DOS-формате(Integer)
-        mails[inputRowStringGrid].fileName := searchResult.Name;
+        mails[indexMails].fileName := searchResult.Name;
         indexMails := IndexMails + 1;
-        inputRowStringGrid := IndexMails;
       until FindNext(searchResult) <> 0;
       FindClose(searchResult);
     end
   else
     begin
       SetLength(mails, Length(mails)+1);
-      mails[inputRowStringGrid] := TMail.Create;
-      mails[inputRowStringGrid].codeMO := inputCodeMO;
-      mails[inputRowStringGrid].isSent := False;
-      mails[inputRowStringGrid].month := inputMonth;
+      mails[indexMails] := TMail.Create;
+
+      mails[indexMails].number := IndexMails + 1;
+      mails[indexMails].codeMO := inputCodeMO;
+      mails[indexMails].isSent := False;
+      mails[indexMails].month := inputMonth;
+
       indexMails := IndexMails + 1;
     end;
 end;
