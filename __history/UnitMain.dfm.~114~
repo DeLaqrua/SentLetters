@@ -202,7 +202,6 @@ object FormMain: TFormMain
     Anchors = [akTop, akBottom]
     ColCount = 4
     DefaultRowHeight = 32
-    DefaultDrawing = False
     DrawingStyle = gdsGradient
     FixedCols = 0
     RowCount = 2
@@ -219,7 +218,7 @@ object FormMain: TFormMain
     ColWidths = (
       161
       39
-      279
-      348)
+      272
+      367)
   end
 end

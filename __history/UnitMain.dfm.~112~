@@ -21,7 +21,7 @@ object FormMain: TFormMain
     650)
   PixelsPerInch = 96
   TextHeight = 23
-  object LabelMonth: TLabel
+  object labelHelp: TLabel
     Left = 8
     Top = 267
     Width = 848
@@ -204,7 +204,8 @@ object FormMain: TFormMain
     DefaultRowHeight = 32
     DrawingStyle = gdsGradient
     FixedCols = 0
-    RowCount = 2
+    RowCount = 1
+    FixedRows = 0
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -16
@@ -218,7 +219,7 @@ object FormMain: TFormMain
     ColWidths = (
       161
       39
-      279
-      348)
+      272
+      354)
   end
 end

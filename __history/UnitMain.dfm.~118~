@@ -14,24 +14,25 @@ object FormMain: TFormMain
   Font.Style = []
   OldCreateOrder = False
   Position = poDesktopCenter
+  OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
     864
     650)
   PixelsPerInch = 96
   TextHeight = 23
-  object LabelMonth: TLabel
-    Left = 168
-    Top = 269
-    Width = 513
+  object labelHelp: TLabel
+    Left = 8
+    Top = 267
+    Width = 848
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
   end
   object buttonCheck: TButton
-    Left = 256
-    Top = 208
+    Left = 272
+    Top = 216
     Width = 329
     Height = 33
     Anchors = [akTop]
@@ -199,7 +200,6 @@ object FormMain: TFormMain
     Width = 848
     Height = 338
     Anchors = [akTop, akBottom]
-    ColCount = 4
     DefaultRowHeight = 32
     DrawingStyle = gdsGradient
     FixedCols = 0
@@ -212,11 +212,13 @@ object FormMain: TFormMain
     Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     ParentFont = False
     TabOrder = 0
+    OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
-      352
+      161
       39
-      155
-      347)
+      130
+      304
+      192)
   end
 end
