@@ -201,7 +201,7 @@ begin
         end;
 
       //Из массива передаём значения в StringGrid
-      stringgridMails.RowCount := Length(mails)+1;
+      stringgridMails.RowCount := Length(mails)+1; //+1, чтобы оставить место для заголовка
       for i := 0 to High(mails) do
         begin
           stringgridMails.Cells[0, mails[i].number] := mails[i].codeMO;
@@ -217,10 +217,13 @@ end;
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
-  {if (Length(mails) > 0) and (ACol = 1) and (mails[ARow].isSent = True) and (ARow = mails[ARow].number) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
-  if (Length(mails) > 0) and (ACol = 1) and (mails[ARow].isSent = False) and (ARow = mails[ARow].number) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);}
+  if ARow <> 0 then
+    begin
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+    end;
 end;
 
 procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string);

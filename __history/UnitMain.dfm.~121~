@@ -80,6 +80,7 @@ object FormMain: TFormMain
       Top = 15
       Width = 610
       Height = 31
+      Style = csDropDownList
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -19
@@ -199,8 +200,8 @@ object FormMain: TFormMain
     Width = 848
     Height = 338
     Anchors = [akTop, akBottom]
-    ColCount = 4
     DefaultRowHeight = 32
+    DefaultDrawing = False
     DrawingStyle = gdsGradient
     FixedCols = 0
     RowCount = 2
@@ -211,13 +212,15 @@ object FormMain: TFormMain
     Font.Style = []
     Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     ParentFont = False
+    ScrollBars = ssVertical
     TabOrder = 0
     OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
       161
       39
-      272
-      354)
+      130
+      312
+      192)
   end
 end

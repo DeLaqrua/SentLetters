@@ -200,7 +200,6 @@ object FormMain: TFormMain
     Width = 848
     Height = 338
     Anchors = [akTop, akBottom]
-    ColCount = 4
     DefaultRowHeight = 32
     DrawingStyle = gdsGradient
     FixedCols = 0
@@ -212,13 +211,15 @@ object FormMain: TFormMain
     Font.Style = []
     Options = [goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goTabs]
     ParentFont = False
+    ScrollBars = ssVertical
     TabOrder = 0
     OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
       161
       39
-      272
-      354)
+      130
+      312
+      192)
   end
 end
