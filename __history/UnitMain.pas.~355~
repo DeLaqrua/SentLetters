@@ -217,10 +217,13 @@ end;
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
-  if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = True) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
-  if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = False) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+  if ARow <> 0 then
+    begin
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+    end;
 end;
 
 procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string);
@@ -294,6 +297,7 @@ procedure TFormMain.buttonSelectDirectoryClick(Sender: TObject);
 begin
   if SelectDirectory('Выберите папку для работы Автопроцессинга:', '', directoryRoot, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
     editSelectDirectory.Text := directoryRoot;
+    labelHelp.Caption := directoryRoot;
 end;
 
 function TFormMain.correctPath(inputDirectory: string): string;

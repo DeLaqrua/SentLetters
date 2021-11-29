@@ -144,6 +144,8 @@ begin
   buttonCheck.Enabled := false;
 
   directoryRoot := correctPath(editSelectDirectory.Text);
+  directoryArchive := directoryRoot + 'Archive\';
+  labelHelp.Caption := directoryArchive;
   if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
     ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
   else
