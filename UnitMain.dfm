@@ -219,7 +219,7 @@ object FormMain: TFormMain
       161
       39
       130
-      312
+      299
       192)
   end
 end

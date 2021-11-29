@@ -144,6 +144,8 @@ begin
   buttonCheck.Enabled := false;
 
   directoryRoot := correctPath(editSelectDirectory.Text);
+  directoryArchive := directoryRoot + 'Archive\';
+  labelHelp.Caption := directoryArchive;
   if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
     ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
   else
@@ -217,13 +219,13 @@ end;
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
-  {if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = True) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
-  if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = False) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);}
   if ARow <> 0 then
-    if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].isSent = True) then
-      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+    begin
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+    end;
 end;
 
 procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string);
