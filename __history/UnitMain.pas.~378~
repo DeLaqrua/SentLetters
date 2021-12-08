@@ -13,17 +13,20 @@ type
     labelHelp: TLabel;
     comboboxSelectMO: TComboBox;
     labelSelectMo: TLabel;
-    labelSelectDirectory: TLabel;
-    editSelectDirectory: TEdit;
-    buttonSelectDirectory: TButton;
+    labelDirectorySentMails: TLabel;
+    editDirectorySentMails: TEdit;
+    buttonDirectorySentMails: TButton;
     groupboxSelectMO: TGroupBox;
     groupboxSelectDirectory: TGroupBox;
     LabelSelectMonth: TLabel;
     comboboxSelectMonth: TComboBox;
     SpinEditYear: TSpinEdit;
     stringgridMails: TStringGrid;
+    editDirectoryCryptoarm: TEdit;
+    labelDirectoryCryptoarm: TLabel;
+    buttonDirectoryCryptoarm: TButton;
     procedure FormCreate(Sender: TObject);
-    procedure buttonSelectDirectoryClick(Sender: TObject);
+    procedure buttonDirectorySentMailsClick(Sender: TObject);
     procedure buttonCheckClick(Sender: TObject);
     procedure comboboxSelectMonthSelect(Sender: TObject);
     procedure SpinEditYearChange(Sender: TObject);
@@ -56,7 +59,7 @@ var
   FormMain: TFormMain;
 
 var
-  directoryRoot, directoryArchive: string;
+  directorySentMails, directorySentMailsArchive, directoryCryptoarm, directoryCryptoarmProcessed: string;
   listCodeMO: TStringList;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
@@ -132,8 +135,10 @@ begin
   end;
   labelHelp.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 
-  directoryRoot := correctPath(editSelectDirectory.Text);
-  directoryArchive := directoryRoot + 'Archive\';
+  directorySentMails := correctPath(editDirectorySentMails.Text);
+  directorySentMailsArchive := directorySentMails + 'Archive\';
+  directoryCryptoarm := correctPath(editDirectoryCryptoarm);
+  directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
@@ -143,17 +148,27 @@ var searchResult: TSearchRec;
 begin
   buttonCheck.Enabled := false;
 
-  directoryRoot := correctPath(editSelectDirectory.Text);
-  if System.SysUtils.DirectoryExists(DirectoryRoot) = False then
-    ShowMessage('Проверьте папку для мониторинга писем. Программа такой папки не нашла.')
+  directorySentMails := correctPath(editDirectorySentMails.Text);
+  directorySentMailsArchive := directorySentMails + 'Archive\';
+  directoryCryptoarm := correctPath(editDirectoryCryptoarm);
+  directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
+  if System.SysUtils.DirectoryExists(directorySentMails) = False then
+    ShowMessage('Проверьте папку для мониторинга отправленных писем. Программа такой папки не нашла.')
+  else
+  if System.SysUtils.DirectoryExists(directorySentMailsArchive) = False then
+    ShowMessage('Отсутствует папка "Archive" в директории ' + directorySentMails + ', в которой хрянятся отправленные письма.')
+  else
+  if System.SysUtils.DirectoryExists(directoryCryptoarm) = False then
+    ShowMessage('Проверьте папку для сравнения с принятыми письмами. Программа такой папки не нашла')
+  else
+  if System.SysUtils.DirectoryExists(directoryCryptoarmProcessed) = False then
+    ShowMessage('Отсутствует папка "Processed" в директории ' + directoryCryptoarm + ', в которой хранятся принятые и обработанные Автопроцессингом КриптоАрм письма от МО.')
   else
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.')
   else
   if FileExists(ExtractFilePath(ParamStr(0))+'codeMO.xls') = False then
-    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.');
-  if System.SysUtils.DirectoryExists(directoryArchive) = False then
-    ShowMessage('Отсутствует папка "Archive" в директории ' + directoryRoot + ', в которой хрянятся отправленные письма.')
+    ShowMessage('В папке с программой отсутствует Excel-файл "codeMO.xls". Это справочник с больницами. Без него программа работать не будет.')
   else
     begin
       //Очищаем массив
@@ -183,10 +198,10 @@ begin
               if comboboxSelectMonth.ItemIndex = ALLMONTH then
                 begin
                   for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
-                    searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[indexMO]);
+                    searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[indexMO]);
                 end
               else
-                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[indexMO]);
+                searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[indexMO]);
             end;
         end
       ELSE
@@ -194,10 +209,10 @@ begin
           if comboboxSelectMonth.ItemIndex = ALLMONTH then
             begin
               for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
-                searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[comboboxSelectMO.ItemIndex-1]);
+                searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Items[monthNumber], listCodeMO[comboboxSelectMO.ItemIndex-1]);
             end
           else
-            searchMails(directoryArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1]);
+            searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1]);
         end;
 
       //Из массива передаём значения в StringGrid
@@ -217,13 +232,13 @@ end;
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
   ARow: Integer; Rect: TRect; State: TGridDrawState);
 begin
-  {if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = True) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
-  if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = False) then
-    stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);}
   if ARow <> 0 then
-    if (Length(mails) > 0) and (ACol = 1) and (ARow = mails[ARow-1].number) and (mails[ARow-1].isSent = True) then
-      stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+    begin
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+    end;
 end;
 
 procedure TFormMain.searchMails(inputDirectoryArchive, inputYear, inputMonth, inputCodeMO: string);
@@ -293,10 +308,10 @@ begin
     labelHelp.Caption := 'Письма за месяц ' + selectedMonth + ' ' + IntToStr(selectedYear) + ' года:';
 end;
 
-procedure TFormMain.buttonSelectDirectoryClick(Sender: TObject);
+procedure TFormMain.buttonDirectorySentMailsClick(Sender: TObject);
 begin
-  if SelectDirectory('Выберите папку для работы Автопроцессинга:', '', directoryRoot, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
-    editSelectDirectory.Text := directoryRoot;
+  if SelectDirectory('Выберите папку для мониторинг отправленных писем:', '', directorySentMails, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
+    editDirectorySentMails.Text := directorySentMails;
 end;
 
 function TFormMain.correctPath(inputDirectory: string): string;

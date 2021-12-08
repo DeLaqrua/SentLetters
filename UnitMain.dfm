@@ -2,7 +2,7 @@ object FormMain: TFormMain
   Left = 0
   Top = 0
   Caption = 'FormMain'
-  ClientHeight = 650
+  ClientHeight = 729
   ClientWidth = 864
   Color = clBackground
   Constraints.MinHeight = 390
@@ -18,21 +18,21 @@ object FormMain: TFormMain
   OnCreate = FormCreate
   DesignSize = (
     864
-    650)
+    729)
   PixelsPerInch = 96
   TextHeight = 23
   object labelHelp: TLabel
-    Left = 8
-    Top = 267
-    Width = 848
+    Left = 16
+    Top = 299
+    Width = 833
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
   end
   object buttonCheck: TButton
-    Left = 272
-    Top = 216
+    Left = 267
+    Top = 255
     Width = 329
     Height = 33
     Anchors = [akTop]
@@ -42,7 +42,7 @@ object FormMain: TFormMain
   end
   object groupboxSelectMO: TGroupBox
     Left = 16
-    Top = 80
+    Top = 131
     Width = 833
     Height = 113
     Anchors = [akTop]
@@ -147,42 +147,74 @@ object FormMain: TFormMain
     Left = 16
     Top = 8
     Width = 833
-    Height = 57
+    Height = 105
     Anchors = [akTop]
     TabOrder = 3
-    object labelSelectDirectory: TLabel
-      Left = 29
-      Top = 16
-      Width = 321
-      Height = 23
+    object labelDirectorySentMails: TLabel
+      Left = 10
+      Top = 8
+      Width = 268
+      Height = 41
+      Hint = 
+        #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091', '#1074' '#1082#1086#1090#1086#1088#1086#1081' '#1093#1088#1072#1085#1103#1090#1089#1103' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085 +
+        #1099#1077' '#1087#1080#1089#1100#1084#1072' '#1058#1072#1085#1080
       AutoSize = False
-      Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1087#1072#1087#1082#1091' '#1076#1083#1103' '#1086#1090#1089#1083#1077#1078#1080#1074#1072#1085#1080#1103' '#1087#1080#1089#1077#1084':'
+      Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1087#1072#1087#1082#1091' '#1076#1083#1103' '#1086#1090#1089#1083#1077#1078#1080#1074#1072#1085#1080#1103' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1093' '#1087#1080#1089#1077#1084':'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsItalic]
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      WordWrap = True
     end
-    object editSelectDirectory: TEdit
-      Left = 356
-      Top = 11
-      Width = 397
+    object labelDirectoryCryptoarm: TLabel
+      Left = 12
+      Top = 53
+      Width = 266
+      Height = 41
+      Hint = #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091' '#1050#1088#1080#1087#1090#1086#1040#1088#1084'-'#1072#1074#1090#1086#1087#1088#1086#1094#1077#1089#1089#1080#1085#1075#1072
+      AutoSize = False
+      Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1087#1072#1087#1082#1091' '#1076#1083#1103' '#1089#1088#1072#1074#1085#1077#1085#1080#1103' '#1089' '#1087#1088#1080#1085#1103#1090#1099#1084#1080' '#1087#1080#1089#1100#1084#1072#1084#1080':'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsItalic]
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      WordWrap = True
+    end
+    object editDirectorySentMails: TEdit
+      Left = 284
+      Top = 12
+      Width = 469
       Height = 31
+      Hint = 
+        #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091', '#1074' '#1082#1086#1090#1086#1088#1086#1081' '#1093#1088#1072#1085#1103#1090#1089#1103' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085 +
+        #1099#1077' '#1087#1080#1089#1100#1084#1072' '#1058#1072#1085#1080
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -19
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       Text = 'E:\Proba\'#1054#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     end
-    object buttonSelectDirectory: TButton
+    object buttonDirectorySentMails: TButton
       Left = 759
       Top = 14
       Width = 26
       Height = 25
+      Hint = 
+        #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091', '#1074' '#1082#1086#1090#1086#1088#1086#1081' '#1093#1088#1072#1085#1103#1090#1089#1103' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085 +
+        #1099#1077' '#1087#1080#1089#1100#1084#1072' '#1058#1072#1085#1080
       Caption = '...'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWhite
@@ -190,15 +222,52 @@ object FormMain: TFormMain
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
-      OnClick = buttonSelectDirectoryClick
+      OnClick = buttonDirectorySentMailsClick
+    end
+    object editDirectoryCryptoarm: TEdit
+      Left = 284
+      Top = 56
+      Width = 469
+      Height = 31
+      Hint = #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091' '#1050#1088#1080#1087#1090#1086#1040#1088#1084'-'#1072#1074#1090#1086#1087#1088#1086#1094#1077#1089#1089#1080#1085#1075#1072
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -19
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 2
+      Text = 'E:\Proba\AutoProcessingFiles'
+    end
+    object buttonDirectoryCryptoarm: TButton
+      Left = 759
+      Top = 58
+      Width = 26
+      Height = 25
+      Hint = #1053#1077#1086#1073#1093#1086#1076#1080#1084#1086' '#1074#1099#1073#1088#1072#1090#1100' '#1082#1086#1088#1085#1077#1074#1091#1102' '#1087#1072#1087#1082#1091' '#1050#1088#1080#1087#1090#1086#1040#1088#1084'-'#1072#1074#1090#1086#1087#1088#1086#1094#1077#1089#1089#1080#1085#1075#1072
+      Caption = '...'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWhite
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 3
+      OnClick = buttonDirectorySentMailsClick
     end
   end
   object stringgridMails: TStringGrid
     Left = 8
-    Top = 304
+    Top = 336
     Width = 848
-    Height = 338
+    Height = 385
     Anchors = [akTop, akBottom]
     DefaultRowHeight = 32
     DrawingStyle = gdsGradient
