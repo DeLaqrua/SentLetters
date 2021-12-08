@@ -260,7 +260,7 @@ object FormMain: TFormMain
       ParentShowHint = False
       ShowHint = True
       TabOrder = 3
-      OnClick = buttonDirectorySentMailsClick
+      OnClick = buttonDirectoryCryptoarmClick
     end
   end
   object stringgridMails: TStringGrid

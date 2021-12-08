@@ -34,6 +34,7 @@ type
     procedure stringgridMailsDrawCell(Sender: TObject; ACol, ARow: Integer;
       Rect: TRect; State: TGridDrawState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure buttonDirectoryCryptoarmClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -192,7 +193,7 @@ begin
                                       //Поэтому RowCount должен быть хотя бы 2.
       j := 0;
       IF comboboxSelectMO.ItemIndex = ALLMO THEN
-        begin
+        BEGIN
           for indexMO := 0 to listCodeMO.Count-1 do
             begin
               if comboboxSelectMonth.ItemIndex = ALLMONTH then
@@ -203,9 +204,9 @@ begin
               else
                 searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[indexMO]);
             end;
-        end
+        END
       ELSE
-        begin
+        BEGIN
           if comboboxSelectMonth.ItemIndex = ALLMONTH then
             begin
               for monthNumber := 1 to comboboxSelectMonth.Items.Count-1 do
@@ -213,7 +214,7 @@ begin
             end
           else
             searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1]);
-        end;
+        END;
 
       //Из массива передаём значения в StringGrid
       stringgridMails.RowCount := Length(mails)+1; //+1, чтобы оставить место для заголовка
@@ -310,8 +311,14 @@ end;
 
 procedure TFormMain.buttonDirectorySentMailsClick(Sender: TObject);
 begin
-  if SelectDirectory('Выберите папку для мониторинг отправленных писем:', '', directorySentMails, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
+  if SelectDirectory('Выберите папку для мониторинга отправленных писем:', '', directorySentMails, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
     editDirectorySentMails.Text := directorySentMails;
+end;
+
+procedure TFormMain.buttonDirectoryCryptoarmClick(Sender: TObject);
+begin
+  if SelectDirectory('Выберите папку для сравнения с полученными письмами:', '', directoryCryptoarm, [sdNewFolder, sdShowShares, sdNewUI, sdValidateDir]) then
+    editDirectoryCryptoarm.Text := directoryCryptoarm;
 end;
 
 function TFormMain.correctPath(inputDirectory: string): string;
