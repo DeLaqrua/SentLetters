@@ -51,6 +51,7 @@ TMail = class(TObject)
   number: integer; //Номер по порядку
   codeMO: string;
   isSent: boolean;
+  isInbox: boolean;
   month: string;
   fileName: string;
   fileDateTime: string;
@@ -144,11 +145,10 @@ begin
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
-var searchResult: TSearchRec;
-    i, j, monthNumber, indexMO: integer;
-    test1, test2, test3: string;
+var i, j, monthNumber, indexMO: integer;
+    searchResult: TSearchRec;
 begin
-  buttonCheck.Enabled := false;
+  buttonCheck.Enabled := False;
 
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
@@ -192,7 +192,8 @@ begin
       stringgridMails.FixedRows := 1; //Первая строка – заголовок.
                                       //Не может быть меньше общего количества строк.
                                       //Поэтому RowCount должен быть хотя бы 2.
-      j := 0;
+
+      //Ищем отправленные письма
       IF comboboxSelectMO.ItemIndex = ALLMO THEN
         BEGIN
           for indexMO := 0 to listCodeMO.Count-1 do
@@ -217,25 +218,46 @@ begin
             searchMails(directorySentMailsArchive, IntToStr(selectedYear), comboboxSelectMonth.Text, listCodeMO[comboboxSelectMO.ItemIndex-1]);
         END;
 
-      //Из массива передаём значения в StringGrid
-      stringgridMails.RowCount := Length(mails)+1; //+1, чтобы оставить место для заголовка
+      //Ищем полученные письма исходя из отправленных
       for i := 0 to High(mails) do
         begin
-          stringgridMails.Cells[0, mails[i].number] := mails[i].codeMO;
-          stringgridMails.Cells[3, mails[i].number] := mails[i].month;
-          stringgridMails.Cells[4, mails[i].number] := mails[i].fileName;
-          stringgridMails.Cells[5, mails[i].number] := mails[i].fileDateTime;
+          if FindFirst(directoryCryptoarmProcessed + IntToStr(selectedYear) + '\' +
+                       mails[i].month + '\' + mails[i].codeMO + '\' +
+                       '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
+            begin
+              if (searchResult.Name <> '.') and (searchResult.Name <> '..') then
+                begin
+                  mails[i].isInbox := True;
+                  FindClose(searchResult);
+                end;
+            end
+          else
+            begin
+              mails[i].isInbox := False;
+              FindClose(searchResult);
+            end;
+        end;
+
+      //Из массива передаём значения в StringGrid
+      stringgridMails.RowCount := Length(mails)+1; //+1, чтобы оставить место для заголовка
+      for j := 0 to High(mails) do
+        begin
+          stringgridMails.Cells[0, mails[j].number] := mails[j].codeMO;
+          stringgridMails.Cells[3, mails[j].number] := mails[j].month;
+          stringgridMails.Cells[4, mails[j].number] := mails[j].fileName;
+          stringgridMails.Cells[5, mails[j].number] := mails[j].fileDateTime;
         end;
     end;
 
-  buttonCheck.Enabled := true;
+  buttonCheck.Enabled := True;
 end;
 
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect {Как Холст в Фотошопе}: TRect; State: TGridDrawState);
+  ARow: Integer; Rect {это как Холст в Фотошопе}: TRect; State: TGridDrawState);
 begin
   if ARow <> 0 then
     begin
+      //Отрисовываем отправленные письма
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
       begin
         //Центрируем картинку
@@ -245,6 +267,24 @@ begin
         stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
       end;
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailNotSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailNotSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+      end;
+
+      //Отрисовываем полученные письма
+      if (Length(mails) > 0) and (ACol = 2) and (mails[ARow-1].isInbox = True) then
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      end;
+      if (Length(mails) > 0) and (ACol = 2) and (mails[ARow-1].isInbox = False) then
       begin
         //Центрируем картинку
         Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailNotSent.Bitmap.Width div 2);
@@ -286,6 +326,8 @@ begin
       mails[indexMails].month := inputMonth;
 
       indexMails := IndexMails + 1;
+
+      FindClose(searchResult);
     end;
 end;
 

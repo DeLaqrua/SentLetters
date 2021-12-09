@@ -39,7 +39,6 @@ object FormMain: TFormMain
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     TabOrder = 1
     OnClick = buttonCheckClick
-    ExplicitLeft = 267
   end
   object groupboxSelectMO: TGroupBox
     Left = 8
