@@ -3,7 +3,7 @@ object FormMain: TFormMain
   Top = 0
   Caption = 'FormMain'
   ClientHeight = 729
-  ClientWidth = 864
+  ClientWidth = 1004
   Color = clBackground
   Constraints.MinHeight = 390
   Constraints.MinWidth = 880
@@ -17,21 +17,21 @@ object FormMain: TFormMain
   OnClose = FormClose
   OnCreate = FormCreate
   DesignSize = (
-    864
+    1004
     729)
   PixelsPerInch = 96
   TextHeight = 23
   object labelHelp: TLabel
-    Left = 16
+    Left = 7
     Top = 299
-    Width = 833
+    Width = 989
     Height = 23
     Alignment = taCenter
     Anchors = [akTop]
     AutoSize = False
   end
   object buttonCheck: TButton
-    Left = 267
+    Left = 337
     Top = 255
     Width = 329
     Height = 33
@@ -39,16 +39,17 @@ object FormMain: TFormMain
     Caption = #1055#1088#1086#1074#1077#1088#1080#1090#1100' '#1086#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     TabOrder = 1
     OnClick = buttonCheckClick
+    ExplicitLeft = 267
   end
   object groupboxSelectMO: TGroupBox
-    Left = 16
-    Top = 131
-    Width = 833
-    Height = 113
+    Left = 8
+    Top = 126
+    Width = 988
+    Height = 109
     Anchors = [akTop]
     TabOrder = 2
     object labelSelectMo: TLabel
-      Left = 56
+      Left = 128
       Top = 23
       Width = 113
       Height = 23
@@ -62,7 +63,7 @@ object FormMain: TFormMain
       ParentFont = False
     end
     object LabelSelectMonth: TLabel
-      Left = 40
+      Left = 112
       Top = 68
       Width = 129
       Height = 23
@@ -76,7 +77,7 @@ object FormMain: TFormMain
       ParentFont = False
     end
     object comboboxSelectMO: TComboBox
-      Left = 175
+      Left = 247
       Top = 15
       Width = 610
       Height = 31
@@ -94,7 +95,7 @@ object FormMain: TFormMain
         '<'#1074#1089#1077'>')
     end
     object comboboxSelectMonth: TComboBox
-      Left = 175
+      Left = 247
       Top = 60
       Width = 483
       Height = 31
@@ -126,7 +127,7 @@ object FormMain: TFormMain
         #1044#1077#1082#1072#1073#1088#1100)
     end
     object SpinEditYear: TSpinEdit
-      Left = 664
+      Left = 736
       Top = 59
       Width = 121
       Height = 33
@@ -144,14 +145,14 @@ object FormMain: TFormMain
     end
   end
   object groupboxSelectDirectory: TGroupBox
-    Left = 16
+    Left = 8
     Top = 8
-    Width = 833
+    Width = 988
     Height = 105
     Anchors = [akTop]
     TabOrder = 3
     object labelDirectorySentMails: TLabel
-      Left = 10
+      Left = 98
       Top = 8
       Width = 268
       Height = 41
@@ -171,7 +172,7 @@ object FormMain: TFormMain
       WordWrap = True
     end
     object labelDirectoryCryptoarm: TLabel
-      Left = 12
+      Left = 100
       Top = 53
       Width = 266
       Height = 41
@@ -189,7 +190,7 @@ object FormMain: TFormMain
       WordWrap = True
     end
     object editDirectorySentMails: TEdit
-      Left = 284
+      Left = 372
       Top = 12
       Width = 469
       Height = 31
@@ -208,7 +209,7 @@ object FormMain: TFormMain
       Text = 'E:\Proba\'#1054#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
     end
     object buttonDirectorySentMails: TButton
-      Left = 759
+      Left = 847
       Top = 14
       Width = 26
       Height = 25
@@ -228,7 +229,7 @@ object FormMain: TFormMain
       OnClick = buttonDirectorySentMailsClick
     end
     object editDirectoryCryptoarm: TEdit
-      Left = 284
+      Left = 372
       Top = 56
       Width = 469
       Height = 31
@@ -245,7 +246,7 @@ object FormMain: TFormMain
       Text = 'E:\Proba\AutoProcessingFiles'
     end
     object buttonDirectoryCryptoarm: TButton
-      Left = 759
+      Left = 847
       Top = 58
       Width = 26
       Height = 25
@@ -266,9 +267,10 @@ object FormMain: TFormMain
   object stringgridMails: TStringGrid
     Left = 8
     Top = 336
-    Width = 848
+    Width = 988
     Height = 385
     Anchors = [akTop, akBottom]
+    ColCount = 6
     DefaultRowHeight = 32
     DrawingStyle = gdsGradient
     FixedCols = 0
@@ -285,10 +287,11 @@ object FormMain: TFormMain
     OnDrawCell = stringgridMailsDrawCell
     OnMouseEnter = stringgridMailsMouseEnter
     ColWidths = (
-      161
-      39
-      130
-      299
-      192)
+      68
+      105
+      102
+      139
+      329
+      228)
   end
 end

@@ -83,14 +83,15 @@ begin
                                  //равное количеству МО из Excel-документа
   stringgridMails.FixedRows := 1; //Первая строка – заголовок
   stringgridMails.Cells[0,0] := 'Код МО:';
-  stringgridMails.Cells[2,0] := 'Месяц отправки:';
-  stringgridMails.Cells[3,0] := 'Имя файла:';
-  stringgridMails.Cells[4,0] := 'Дата изменения файла:';
+  stringgridMails.Cells[1,0] := 'Отправлено:';
+  stringgridMails.Cells[2,0] := 'Получено:';
+  stringgridMails.Cells[3,0] := 'Месяц отправки:';
+  stringgridMails.Cells[4,0] := 'Имя файла:';
+  stringgridMails.Cells[5,0] := 'Дата изменения файла:';
   imgMailSent := TPicture.Create;
   imgMailNotSent := TPicture.Create;
   imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
   imgMailNotSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailNotSent32px.bmp');
-  stringgridMails.ColWidths[1] := 36;
   stringgridMails.DefaultRowHeight := 32;
 
   listCodeMo := TStringList.Create;
@@ -221,9 +222,9 @@ begin
       for i := 0 to High(mails) do
         begin
           stringgridMails.Cells[0, mails[i].number] := mails[i].codeMO;
-          stringgridMails.Cells[2, mails[i].number] := mails[i].month;
-          stringgridMails.Cells[3, mails[i].number] := mails[i].fileName;
-          stringgridMails.Cells[4, mails[i].number] := mails[i].fileDateTime;
+          stringgridMails.Cells[3, mails[i].number] := mails[i].month;
+          stringgridMails.Cells[4, mails[i].number] := mails[i].fileName;
+          stringgridMails.Cells[5, mails[i].number] := mails[i].fileDateTime;
         end;
     end;
 
@@ -231,14 +232,26 @@ begin
 end;
 
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect: TRect; State: TGridDrawState);
+  ARow: Integer; Rect {Как Холст в Фотошопе}: TRect; State: TGridDrawState);
 begin
   if ARow <> 0 then
     begin
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailSent.Bitmap.Width;
+
         stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      end;
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailNotSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailNotSent.Bitmap.Width;
+
         stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+      end;
     end;
 end;
 
@@ -256,7 +269,7 @@ begin
         mails[indexMails].isSent := True;
         mails[indexMails].month := inputMonth;
         mails[indexMails].fileDateTime := DateTimeToStr(FileDateToDateTime(searchResult.Time)); //Время изменения файла возвращается
-                                                                                                        //в DOS-формате(Integer)
+                                                                                                //в DOS-формате(Integer)
         mails[indexMails].fileName := searchResult.Name;
         indexMails := IndexMails + 1;
       until FindNext(searchResult) <> 0;
