@@ -205,7 +205,7 @@ object FormMain: TFormMain
       ParentShowHint = False
       ShowHint = True
       TabOrder = 0
-      Text = 'E:\Proba\'#1054#1090#1087#1088#1072#1074#1083#1077#1085#1085#1099#1077' '#1087#1080#1089#1100#1084#1072
+      Text = '\\192.168.200.142\obmen\'#1054#1090#1076#1077#1083' '#1054' '#1080' '#1040' '#1091#1095'.'#1054#1052#1057'\'#1057#1095#1077#1090#1072'\'#1054#1090#1087#1088#1072#1074#1082#1072' '#1089#1095#1077#1090#1086#1074
     end
     object buttonDirectorySentMails: TButton
       Left = 847
@@ -242,7 +242,7 @@ object FormMain: TFormMain
       ParentShowHint = False
       ShowHint = True
       TabOrder = 2
-      Text = 'E:\Proba\AutoProcessingFiles'
+      Text = '\\192.168.200.142\obmen\'#1054#1090#1076#1077#1083' '#1054' '#1080' '#1040' '#1091#1095'.'#1054#1052#1057'\'#1057#1095#1077#1090#1072'\in'
     end
     object buttonDirectoryCryptoarm: TButton
       Left = 847
