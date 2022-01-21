@@ -223,11 +223,13 @@ begin
         begin
           if FindFirst(directoryCryptoarmProcessed + IntToStr(selectedYear) + '\' +
                        mails[i].month + '\' + mails[i].codeMO + '\' +
-                       '*' + StringReplace(mails[i].fileName, ExtractFileExt(mails[i].fileName), '', [rfIgnoreCase]) +
-                       '*', faDirectory, searchResult) = 0 then
+                       '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
             begin
-              mails[i].isInbox := True;           //ChangeFileExt(mails[i].fileName, '')
-              FindClose(searchResult);
+              if (searchResult.Name <> '.') and (searchResult.Name <> '..') then
+                begin
+                  mails[i].isInbox := True;
+                  FindClose(searchResult);
+                end;
             end
           else
             begin
@@ -251,31 +253,45 @@ begin
 end;
 
 procedure TFormMain.stringgridMailsDrawCell(Sender: TObject; ACol,
-  ARow: Integer; Rect: TRect; State: TGridDrawState);
-var HolstImgSentMail, HolstImgNotSentMail: TRect; //Rect это как Холст в Фотошопе
+  ARow: Integer; Rect {это как Холст в Фотошопе}: TRect; State: TGridDrawState);
 begin
   if ARow <> 0 then
     begin
-      //Центрируем картинку
-      HolstImgSentMail.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
-      HolstImgSentMail.Right := HolstImgSentMail.Left + imgMailSent.Bitmap.Width;
-      HolstImgSentMail.Top := Rect.Top;
-      HolstImgSentMail.Bottom := Rect.Bottom;
-      HolstImgNotSentMail.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
-      HolstImgNotSentMail.Right := HolstImgNotSentMail.Left + imgMailSent.Bitmap.Width;
-      HolstImgNotSentMail.Top := Rect.Top;
-      HolstImgNotSentMail.Bottom := Rect.Bottom;
-
       //Отрисовываем отправленные письма
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = True) then
-        stringgridMails.Canvas.StretchDraw(HolstImgSentMail, imgMailSent.Graphic);
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      end;
       if (Length(mails) > 0) and (ACol = 1) and (mails[ARow-1].isSent = False) then
-        stringgridMails.Canvas.StretchDraw(HolstImgNotSentMail, imgMailNotSent.Graphic);
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailNotSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailNotSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+      end;
+
       //Отрисовываем полученные письма
       if (Length(mails) > 0) and (ACol = 2) and (mails[ARow-1].isInbox = True) then
-        stringgridMails.Canvas.StretchDraw(HolstImgSentMail, imgMailSent.Graphic);
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailSent.Graphic);
+      end;
       if (Length(mails) > 0) and (ACol = 2) and (mails[ARow-1].isInbox = False) then
-        stringgridMails.Canvas.StretchDraw(HolstImgNotSentMail, imgMailNotSent.Graphic);
+      begin
+        //Центрируем картинку
+        Rect.Left := Rect.Left + Round(Rect.Width div 2) - Round(imgMailNotSent.Bitmap.Width div 2);
+        Rect.Right := Rect.Left + imgMailNotSent.Bitmap.Width;
+
+        stringgridMails.Canvas.StretchDraw(Rect, imgMailNotSent.Graphic);
+      end;
     end;
 end;
 

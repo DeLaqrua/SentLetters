@@ -141,7 +141,7 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
+  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
@@ -153,7 +153,7 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
+  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
   if System.SysUtils.DirectoryExists(directorySentMails) = False then
     ShowMessage('Проверьте папку для мониторинга отправленных писем. Программа такой папки не нашла.')
   else
@@ -162,9 +162,9 @@ begin
   else
   if System.SysUtils.DirectoryExists(directoryCryptoarm) = False then
     ShowMessage('Проверьте папку для сравнения с принятыми письмами. Программа такой папки не нашла')
-  else
+  {else
   if System.SysUtils.DirectoryExists(directoryCryptoarmProcessed) = False then
-    ShowMessage('Отсутствует папка "Processed" в директории ' + directoryCryptoarm + ', в которой хранятся принятые и обработанные Автопроцессингом КриптоАрм письма от МО.')
+    ShowMessage('Отсутствует папка "Processed" в директории ' + directoryCryptoarm + ', в которой хранятся принятые и обработанные Автопроцессингом КриптоАрм письма от МО.')}
   else
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.')
@@ -221,7 +221,7 @@ begin
       //Ищем полученные письма исходя из отправленных
       for i := 0 to High(mails) do
         begin
-          if FindFirst(directoryCryptoarmProcessed + IntToStr(selectedYear) + '\' +
+          if FindFirst(directoryCryptoarm + IntToStr(selectedYear) + '\' +
                        mails[i].month + '\' + mails[i].codeMO + '\' +
                        '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
             begin
