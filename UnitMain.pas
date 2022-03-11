@@ -88,7 +88,7 @@ begin
   stringgridMails.Cells[2,0] := 'Получено:';
   stringgridMails.Cells[3,0] := 'Месяц отправки:';
   stringgridMails.Cells[4,0] := 'Имя файла:';
-  stringgridMails.Cells[5,0] := 'Дата изменения файла:';
+  stringgridMails.Cells[5,0] := 'Примерная дата отправки:';
   imgMailSent := TPicture.Create;
   imgMailNotSent := TPicture.Create;
   imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
