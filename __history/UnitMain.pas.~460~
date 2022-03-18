@@ -63,6 +63,7 @@ var
 var
   directorySentMails, directorySentMailsArchive, directoryCryptoarm, directoryCryptoarmProcessed: string;
   listCodeMO: TStringList;
+  listCodeSMO: array of string;
   selectedNumberMonth, selectedYear: integer;
   selectedMonth: string;
   imgMailSent, imgMailNotSent: TPicture;
@@ -88,12 +89,17 @@ begin
   stringgridMails.Cells[2,0] := 'Получено:';
   stringgridMails.Cells[3,0] := 'Месяц отправки:';
   stringgridMails.Cells[4,0] := 'Имя файла:';
-  stringgridMails.Cells[5,0] := 'Дата изменения файла:';
+  stringgridMails.Cells[5,0] := 'Примерная дата отправки:';
   imgMailSent := TPicture.Create;
   imgMailNotSent := TPicture.Create;
   imgMailSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailSent32px.bmp');
   imgMailNotSent.LoadFromFile(ExtractFilePath(ParamStr(0))+'Icons\mailNotSent32px.bmp');
   stringgridMails.DefaultRowHeight := 32;
+
+  SetLength(listCodeSMO, 3);
+  listCodeSMO[0] := '83001';
+  listCodeSMO[1] := '83005';
+  listCodeSMO[2] := '83008';
 
   listCodeMo := TStringList.Create;
   comboboxSelectMo.ItemIndex := ALLMO;
@@ -141,11 +147,10 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
-var i, j, monthNumber, indexMO: integer;
+var i, j, s, monthNumber, indexMO: integer;
     searchResult: TSearchRec;
 begin
   buttonCheck.Enabled := False;
@@ -153,7 +158,6 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
   if System.SysUtils.DirectoryExists(directorySentMails) = False then
     ShowMessage('Проверьте папку для мониторинга отправленных писем. Программа такой папки не нашла.')
   else
@@ -162,9 +166,6 @@ begin
   else
   if System.SysUtils.DirectoryExists(directoryCryptoarm) = False then
     ShowMessage('Проверьте папку для сравнения с принятыми письмами. Программа такой папки не нашла')
-  {else
-  if System.SysUtils.DirectoryExists(directoryCryptoarmProcessed) = False then
-    ShowMessage('Отсутствует папка "Processed" в директории ' + directoryCryptoarm + ', в которой хранятся принятые и обработанные Автопроцессингом КриптоАрм письма от МО.')}
   else
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.')
@@ -221,20 +222,23 @@ begin
       //Ищем полученные письма исходя из отправленных
       for i := 0 to High(mails) do
         begin
-          if FindFirst(directoryCryptoarm + IntToStr(selectedYear) + '\' +
-                       mails[i].month + '\' + mails[i].codeMO + '\' +
-                       '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
+          for s := 0 to High(listCodeSMO) do
             begin
-              if (searchResult.Name <> '.') and (searchResult.Name <> '..') then
+              if FindFirst(directoryCryptoarm + IntToStr(selectedYear) + '\' +
+                           mails[i].month + '\' + listCodeSMO[s] + '\' +
+                           '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
                 begin
-                  mails[i].isInbox := True;
+                  if (searchResult.Name <> '.') and (searchResult.Name <> '..') then
+                    begin
+                      mails[i].isInbox := True;
+                      FindClose(searchResult);
+                    end;
+                end
+              else
+                begin
+                  mails[i].isInbox := False;
                   FindClose(searchResult);
                 end;
-            end
-          else
-            begin
-              mails[i].isInbox := False;
-              FindClose(searchResult);
             end;
         end;
 

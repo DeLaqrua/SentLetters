@@ -50,6 +50,7 @@ type
 TMail = class(TObject)
   number: integer; //Номер по порядку
   codeMO: string;
+  codeSMO: string;
   isSent: boolean;
   isInbox: boolean;
   month: string;
@@ -141,7 +142,6 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
 end;
 
 procedure TFormMain.buttonCheckClick(Sender: TObject);
@@ -153,7 +153,6 @@ begin
   directorySentMails := correctPath(editDirectorySentMails.Text);
   directorySentMailsArchive := directorySentMails + 'Archive\';
   directoryCryptoarm := correctPath(editDirectoryCryptoarm.Text);
-  //directoryCryptoarmProcessed := directoryCryptoarm + 'Processed\';
   if System.SysUtils.DirectoryExists(directorySentMails) = False then
     ShowMessage('Проверьте папку для мониторинга отправленных писем. Программа такой папки не нашла.')
   else
@@ -162,9 +161,6 @@ begin
   else
   if System.SysUtils.DirectoryExists(directoryCryptoarm) = False then
     ShowMessage('Проверьте папку для сравнения с принятыми письмами. Программа такой папки не нашла')
-  {else
-  if System.SysUtils.DirectoryExists(directoryCryptoarmProcessed) = False then
-    ShowMessage('Отсутствует папка "Processed" в директории ' + directoryCryptoarm + ', в которой хранятся принятые и обработанные Автопроцессингом КриптоАрм письма от МО.')}
   else
   if checkExcelInstall = False then
     ShowMessage('На вашем компьютере не установлен Excel.')
@@ -222,7 +218,7 @@ begin
       for i := 0 to High(mails) do
         begin
           if FindFirst(directoryCryptoarm + IntToStr(selectedYear) + '\' +
-                       mails[i].month + '\' + mails[i].codeMO + '\' +
+                       mails[i].month + '\' + mails[i].codeSMO + '\' +
                        '*' + ChangeFileExt(mails[i].fileName, '') + '*', faDirectory, searchResult) = 0 then
             begin
               if (searchResult.Name <> '.') and (searchResult.Name <> '..') then
@@ -306,6 +302,7 @@ begin
 
         mails[indexMails].number := IndexMails + 1;
         mails[indexMails].codeMO := inputCodeMO;
+        mails[indexMails].codeSMO := Copy(searchResult.Name, AnsiPos(mails[indexMails].codeMO, searchResult.Name)+7, 5);
         mails[indexMails].isSent := True;
         mails[indexMails].month := inputMonth;
         mails[indexMails].fileDateTime := DateTimeToStr(FileDateToDateTime(searchResult.Time)); //Время изменения файла возвращается
